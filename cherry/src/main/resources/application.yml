@@ -1,0 +1,30 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/cherry
+    username: root
+    password: 20181549
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        format_sql: ture
+        dialect:
+  main:
+    allow-bean-definition-overriding: true
+
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            clientId: <GOOGLE_CLIENT_ID>
+            clientSecret: <GOOGLE_CLIENT_SECRET>
+            redirect-uri:  "{baseUrl}/oauth2/callback/{registrationId}"
+            scope:
+              - email
+              - profile
+logging:
+  level:
+    org.hibernate.sql: debug
