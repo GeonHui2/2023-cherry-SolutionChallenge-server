@@ -3,7 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/2023-cherry-SolutionChallenge-server.iml" filepath="$PROJECT_DIR$/.idea/2023-cherry-SolutionChallenge-server.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/cherry.main.iml" filepath="$PROJECT_DIR$/.idea/modules/cherry.main.iml" />
     </modules>
   </component>
 </project>

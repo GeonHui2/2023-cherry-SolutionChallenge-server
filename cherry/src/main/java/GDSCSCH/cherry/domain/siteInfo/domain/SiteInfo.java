@@ -2,6 +2,9 @@ package GDSCSCH.cherry.domain.siteInfo.domain;
 
 import GDSCSCH.cherry.domain.admin.domain.Admin;
 import GDSCSCH.cherry.domain.siteCheck.domain.SiteCheck;
+import GDSCSCH.cherry.domain.siteInfo.domain.vo.SiteInfoVo;
+import GDSCSCH.cherry.domain.siteInfo.exception.NotAdminException;
+import GDSCSCH.cherry.domain.siteInfo.service.dto.UpdateSiteInfoDto;
 import GDSCSCH.cherry.domain.user.domain.User;
 import lombok.Builder;
 import lombok.Getter;
@@ -27,7 +30,7 @@ public class SiteInfo {
     @Column(name = "site_info_id")
     private Long id;
 
-    private String siteCode = UUID.randomUUID().toString().substring(0, 8);
+    private String siteCode;
     private String siteName;
     private Double siteLatitude;
     private Double siteLongitude;
@@ -42,20 +45,51 @@ public class SiteInfo {
     private List<SiteCheck> siteCheckList = new ArrayList<>();
 
     @Builder
-    public SiteInfo(String siteName, Double siteLatitude, Double siteLongitude, List<User> userList, Admin admin, List<SiteCheck> siteCheckList) {
+    public SiteInfo(String siteCode, String siteName, Double siteLatitude, Double siteLongitude, Admin admin) {
+        this.siteCode = siteCode;
         this.siteName = siteName;
         this.siteLatitude = siteLatitude;
         this.siteLongitude = siteLongitude;
-        this.userList = userList;
         this.admin = admin;
-        this.siteCheckList = siteCheckList;
+    }
+
+    //생성 메서드
+    public static SiteInfo createSiteInfo(String siteName, Double siteLatitude, Double siteLongitude, Admin admin) {
+        return builder()
+                .siteCode(UUID.randomUUID().toString().substring(0, 8))
+                .siteName(siteName)
+                .siteLatitude(siteLatitude)
+                .siteLongitude(siteLongitude)
+                .admin(admin)
+                .build();
     }
 
     //현장 정보 수정
-    public void changeSiteInfo(String siteName, Double siteLatitude, Double siteLongitude) {
-        this.siteName = siteName;
-        this.siteLatitude = siteLatitude;
-        this.siteLongitude = siteLongitude;
+    public void updateSiteInfo(UpdateSiteInfoDto updateSiteInfoDto) {
+        this.siteName = updateSiteInfoDto.getSiteName();
+        this.siteLatitude = updateSiteInfoDto.getSiteLatitude();
+        this.siteLongitude = updateSiteInfoDto.getSiteLongitude();
+    }
+
+    //관리자확인
+    public void validAdminIsHost(Long id) {
+        if (!checkAdminIsHost(id)) {
+            throw NotAdminException.EXCEPTION;
+        }
+    }
+
+    public SiteInfoVo getSiteInfoVo() {
+        return SiteInfoVo.builder()
+                .siteId(id)
+                .siteCode(siteCode)
+                .siteName(siteName)
+                .siteLatitude(siteLatitude)
+                .siteLongitude(siteLongitude)
+                .build();
+    }
+
+    public boolean checkAdminIsHost(Long id) {
+        return admin.getId().equals(id);
     }
 
     //== 연관 관계 메서드==//

@@ -1,5 +1,6 @@
 package GDSCSCH.cherry.domain.siteCheck.domain;
 
+import GDSCSCH.cherry.domain.siteCheck.domain.vo.SiteCheckInfoVo;
 import GDSCSCH.cherry.domain.siteInfo.domain.SiteInfo;
 import lombok.Builder;
 import lombok.Getter;
@@ -24,15 +25,36 @@ public class SiteCheck {
     private String siteQuestion;
     private boolean siteAnswer;
 
-    @ManyToOne (fetch = LAZY)
+    @ManyToOne (fetch = LAZY,cascade = CascadeType.REMOVE)
     @JoinColumn(name = "site_info_id")
     private SiteInfo siteInfo;
 
     @Builder
-    public SiteCheck(String siteQuestion, boolean siteAnswer, SiteInfo siteInfo) {
+    public SiteCheck(String siteQuestion, boolean siteAnswer) {
         this.siteQuestion = siteQuestion;
         this.siteAnswer = siteAnswer;
-        this.siteInfo = siteInfo;
+    }
+
+    //생성 메서드
+    public static SiteCheck createSiteCheck(String siteQuestion) {
+        return builder()
+                .siteQuestion(siteQuestion)
+                .siteAnswer(false)
+                .build();
+    }
+
+    // 체크 리스트 질문 수정
+    public void changeQuestion(String siteQuestion) {
+        this.siteQuestion = siteQuestion;
+    }
+
+    // 체크 리스트 상태 수정
+    public void updateSiteCheckAnswer(boolean Answer) {
+        this.siteAnswer = Answer;
+    }
+
+    public SiteCheckInfoVo getCheckInfo() {
+        return new SiteCheckInfoVo(id, siteQuestion, siteAnswer);
     }
 
 

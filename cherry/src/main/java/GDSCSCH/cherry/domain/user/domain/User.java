@@ -1,7 +1,9 @@
 package GDSCSCH.cherry.domain.user.domain;
 
 import GDSCSCH.cherry.domain.admin.domain.Role;
+import GDSCSCH.cherry.domain.admin.domain.vo.AdminInfoVo;
 import GDSCSCH.cherry.domain.siteInfo.domain.SiteInfo;
+import GDSCSCH.cherry.domain.user.domain.vo.UserInfoVo;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -37,14 +39,24 @@ public class User {
     private SiteInfo siteInfo;
 
     @Builder
-    public User(String userName, String userEmail, String userPhoneNum, Integer userAge, Role role, boolean userHelmetCheck, SiteInfo siteInfo) {
+    public User(String userName, String userEmail, String userPhoneNum, Integer userAge, Role role, boolean userHelmetCheck) {
         this.userName = userName;
         this.userEmail = userEmail;
         this.userPhoneNum = userPhoneNum;
         this.userAge = userAge;
         this.role = role;
         this.userHelmetCheck = userHelmetCheck;
-        this.siteInfo = siteInfo;
+    }
+
+    public static User createUser(String userName, String userEmail, String userPhoneNum, Integer userAge) {
+        return builder()
+                .userName(userName)
+                .userEmail(userEmail)
+                .userPhoneNum(userPhoneNum)
+                .userAge(userAge)
+                .role(Role.GUEST)
+                .userHelmetCheck(false)
+                .build();
     }
 
     //유저 정보 수정
@@ -67,5 +79,9 @@ public class User {
     //
     public void mappingUser(SiteInfo siteInfo) {
         this.siteInfo = siteInfo;
+    }
+
+    public UserInfoVo getUserInfo() {
+        return new UserInfoVo(id, userName, userEmail, userPhoneNum, userAge, role);
     }
 }
