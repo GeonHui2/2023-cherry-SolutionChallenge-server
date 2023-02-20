@@ -1,5 +1,6 @@
 package GDSCSCH.cherry.domain.admin.domain;
 
+import GDSCSCH.cherry.domain.admin.domain.vo.AdminInfoVo;
 import GDSCSCH.cherry.domain.siteInfo.domain.SiteInfo;
 import lombok.Builder;
 import lombok.Getter;
@@ -26,7 +27,7 @@ public class Admin {
     private String adminName;
     private String adminEmail;
     private String adminPhoneNum;
-    private Integer adminAge;
+    private int adminAge;
 
     @Enumerated(STRING)
     private Role role = ADMIN;
@@ -36,19 +37,41 @@ public class Admin {
     private SiteInfo siteInfo;
 
     @Builder
-    public Admin(String adminName, String adminEmail, String adminPhoneNum, Integer adminAge, Role role, SiteInfo siteInfo) {
+    public Admin(String adminName, String adminEmail, String adminPhoneNum, int adminAge, Role role) {
         this.adminName = adminName;
         this.adminEmail = adminEmail;
         this.adminPhoneNum = adminPhoneNum;
         this.adminAge = adminAge;
         this.role = role;
-        this.siteInfo = siteInfo;
+    }
+
+    //생성 메서드
+    public static Admin createAdmin(String adminName, String adminEmail, String adminPhoneNum, int adminAge) {
+        return builder()
+                .adminName(adminName)
+                .adminEmail(adminEmail)
+                .adminPhoneNum(adminPhoneNum)
+                .adminAge(adminAge)
+                .role(ADMIN)
+                .build();
     }
 
     //관리자 정보 수정
-    public void changeAdminInfo(String adminName,String adminPhoneNum, Integer adminAge) {
+    public void changeAdminInfo(String adminName,String adminPhoneNum, int adminAge) {
         this.adminName = adminName;
         this.adminPhoneNum = adminPhoneNum;
         this.adminAge = adminAge;
+    }
+
+    public AdminInfoVo getAdminInfo() {
+        return new AdminInfoVo(id, adminName, adminPhoneNum, adminAge);
+    }
+
+    //== 연관 관계 메서드==//
+    public void addSiteInfo(SiteInfo site) {
+        this.siteInfo = site;
+    }
+    public void subSiteInfo() {
+        this.siteInfo = null;
     }
 }
