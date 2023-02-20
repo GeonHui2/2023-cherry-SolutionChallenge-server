@@ -62,6 +62,8 @@ public class SiteCheckService {
     public void deleteSiteCheck(Long siteCheckId) {
         SiteCheck check = findSiteCheck(siteCheckId);
         check.getSiteInfo().subSiteCheck(check);
+        SiteInfo site = check.getSiteInfo();
+        site.subSiteCheck(check);
         siteCheckRepository.deleteById(siteCheckId);
     }
 
