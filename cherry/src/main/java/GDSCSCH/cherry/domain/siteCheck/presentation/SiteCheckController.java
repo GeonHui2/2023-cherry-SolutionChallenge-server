@@ -37,20 +37,20 @@ public class SiteCheckController {
         return SuccessResponse.successtoResponseEntity(StatusCode.OK, checkList, SuccessResponseMessage.GET_CHECKLIST);
     }
 
-    //현장 체크 질문 삭제
-    @DeleteMapping("/{checkId}")
-    public ResponseEntity deleteSiteCheck(@PathVariable("checkId") Long checkId) {
-        siteCheckService.deleteSiteCheck(checkId);
-
-        return SuccessResponse.successtoResponseEntity(StatusCode.OK, null, SuccessResponseMessage.DELETE_CHECKLIST);
-    }
-
     //현장 체크 질문 수정
     @PatchMapping("/question/{checkId}")
     public ResponseEntity editQuestion(@PathVariable("checkId") Long checkId, @RequestBody ChangeCheckQuestionRequest questionRequest) {
         siteCheckService.changeCheckQuestion(questionRequest, checkId);
 
         return SuccessResponse.successtoResponseEntity(StatusCode.OK, null, SuccessResponseMessage.EDIT_CHECKLIST);
+    }
+
+    //현장 체크 질문 삭제
+    @DeleteMapping("/{checkId}")
+    public ResponseEntity deleteSiteCheck(@PathVariable("checkId") Long checkId) {
+        siteCheckService.deleteSiteCheck(checkId);
+
+        return SuccessResponse.successtoResponseEntity(StatusCode.OK, null, SuccessResponseMessage.DELETE_CHECKLIST);
     }
 
     //현장 체크 리스트 상태 수정
