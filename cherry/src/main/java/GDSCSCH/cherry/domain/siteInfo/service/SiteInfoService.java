@@ -4,6 +4,7 @@ import GDSCSCH.cherry.domain.admin.domain.Admin;
 import GDSCSCH.cherry.domain.admin.domain.Role;
 import GDSCSCH.cherry.domain.siteCheck.domain.SiteCheck;
 import GDSCSCH.cherry.domain.siteCheck.domain.repository.SiteCheckRepository;
+import GDSCSCH.cherry.domain.siteCheck.service.SiteCheckService;
 import GDSCSCH.cherry.domain.siteInfo.domain.SiteInfo;
 import GDSCSCH.cherry.domain.siteInfo.domain.repository.SiteInfoRepository;
 import GDSCSCH.cherry.domain.siteInfo.exception.SiteInfoNotFoundException;
@@ -29,6 +30,7 @@ public class SiteInfoService implements SiteInfoUtils{
     private final SiteInfoRepository siteInfoRepository;
     private final SiteCheckRepository siteCheckRepository;
     private final UserRepository userRepository;
+    private final SiteCheckService siteCheckService;
     private final AdminUtils adminUtils;
 
     //현장 정보 생성
@@ -46,6 +48,8 @@ public class SiteInfoService implements SiteInfoUtils{
         siteInfoRepository.save(siteInfo);
 
         currentAdmin.addSiteInfo(siteInfo);
+
+        siteCheckService.addDefaultCheckList(siteInfo.getId());
 
         return siteInfo.getId();
     }
