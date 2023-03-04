@@ -38,5 +38,10 @@ public class SuccessResponseMessage {
     public static final String DELETE_CHECKLIST = "질문 삭제 완료";
     public static final String EDIT_CHECK_ANSWER = "상태 수정 완료";
 
+    //DefaultSiteCheck
+    public static final String CREATE_DEFAULT_CHECK = "기본 질문 생성 완료";
+    public static final String EDIT_DEFAULT_CHECKLIST = "기본 질문 수정 완료";
+    public static final String DELETE_DEFAULT_CHECKLIST = "기본 질문 삭제 완료";
+
 
 }

@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 public enum ErrorCode {
 
     SITE_CHECK_NOT_FOUND(404, "CHECK-404-1", "SiteCheck Not Found"),
+    DEFAULT_SITE_CHECK_NOT_FOUND(404, "DEFAULT-CHECK-404-1", "DefaultSiteCheck Not Found"),
     SITE_NOT_FOUND(404, "SITE-404-1", "SiteInfo Not Found"),
     ADMIN_NOT_SITE(400, "SITE-400-1", "Admin Not Site"),
     USER_NOT_FOUND(HttpStatus.NOT_FOUND.value(), "GLOBAL-404-1", "User Not Found."),
