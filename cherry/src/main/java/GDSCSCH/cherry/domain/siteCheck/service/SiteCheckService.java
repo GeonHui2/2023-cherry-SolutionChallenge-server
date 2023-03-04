@@ -1,19 +1,18 @@
 package GDSCSCH.cherry.domain.siteCheck.service;
 
 import GDSCSCH.cherry.domain.admin.domain.Admin;
+import GDSCSCH.cherry.domain.defaultSiteCheck.domain.DefaultSiteCheck;
+import GDSCSCH.cherry.domain.defaultSiteCheck.repository.DefaultSiteCheckRepository;
 import GDSCSCH.cherry.domain.siteCheck.domain.SiteCheck;
 import GDSCSCH.cherry.domain.siteCheck.domain.repository.SiteCheckRepository;
-import GDSCSCH.cherry.domain.siteCheck.domain.vo.SiteCheckInfoVo;
 import GDSCSCH.cherry.domain.siteCheck.exception.SiteCheckNotFoundException;
 import GDSCSCH.cherry.domain.siteCheck.presentation.dto.request.AddSiteCheckRequest;
 import GDSCSCH.cherry.domain.siteCheck.presentation.dto.request.ChangeCheckQuestionRequest;
 import GDSCSCH.cherry.domain.siteCheck.presentation.dto.request.UpdateSiteCheckAnswerRequest;
-import GDSCSCH.cherry.domain.siteCheck.presentation.dto.request.UpdateSiteCheckRequest;
 import GDSCSCH.cherry.domain.siteCheck.presentation.dto.response.SiteCheckResponse;
 import GDSCSCH.cherry.domain.siteInfo.domain.SiteInfo;
 import GDSCSCH.cherry.domain.siteInfo.domain.repository.SiteInfoRepository;
 import GDSCSCH.cherry.domain.siteInfo.exception.SiteInfoNotFoundException;
-import GDSCSCH.cherry.domain.user.domain.repository.UserRepository;
 import GDSCSCH.cherry.global.utils.admin.AdminUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,6 +30,7 @@ public class SiteCheckService {
 
     private final SiteCheckRepository siteCheckRepository;
     private final SiteInfoRepository siteInfoRepository;
+    private final DefaultSiteCheckRepository defaultSiteCheckRepository;
     private final AdminUtils adminUtils;
 
     //현장 체크 리스트 입력
@@ -82,6 +82,18 @@ public class SiteCheckService {
 
         SiteCheck siteCheck = findSiteCheck(siteCheckId);
         siteCheck.updateSiteCheckAnswer(updateSiteCheckAnswerRequest.isAnswer());
+    }
+
+    //기본 현장 체크 리스트 입력
+    @Transactional
+    public void addDefaultCheckList(Long id) {
+        List<DefaultSiteCheck> defaultCheckList = defaultSiteCheckRepository.findAll();
+
+        for (DefaultSiteCheck d : defaultCheckList) {
+            AddSiteCheckRequest addSiteCheckRequest = new AddSiteCheckRequest(id, d.getDefaultQuestion());
+
+            addSiteCheck(addSiteCheckRequest);
+        }
     }
 
     //해당 현장 체크 질문 조회
