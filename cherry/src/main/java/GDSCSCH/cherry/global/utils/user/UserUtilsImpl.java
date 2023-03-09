@@ -15,14 +15,14 @@ public class UserUtilsImpl implements UserUtils {
     private final UserRepository userRepository;
 
     @Override
-    public User getUserById(Long id) {
-        return userRepository.findById(id).orElseThrow(() -> UserNotFoundException.EXCEPTION);
+    public User getUserByEmail(String email) {
+        return userRepository.findByUserEmail(email).orElseThrow(() -> UserNotFoundException.EXCEPTION);
     }
 
     @Override
     public User getUserFromSecurityContext() {
-        Long userId = SecurityUtils.getCurrentUserId();
-        User user = getUserById(userId);
+        String currentUserEmail = SecurityUtils.getCurrentUserId();
+        User user = getUserByEmail(currentUserEmail);
         return user;
     }
 }

@@ -3,7 +3,9 @@ package GDSCSCH.cherry.global.successResponse;
 public class SuccessResponseMessage {
 
     //Admin
+    public static final String ADMIN_SIGNIN_SUCCESS = "관리자 로그인 성공";
     public static final String ADMIN_SIGNUP_SUCCESS = "관리자 회원가입 성공";
+    public static final String ADMIN_LOGOUT_SUCCESS = "관리자 로그아웃 성공";
     public static final String EDIT_ADMIN_INFO = "관리자 개인 정보 수정 성공";
     public static final String GET_ADMIN_INFO = "관리자 개인 정보 조회 성공";
 
@@ -16,7 +18,9 @@ public class SuccessResponseMessage {
     public static final String USER_HELMET_LIST = "안전모 착용 유무 근로자 리스트 조회 완료";
 
     //User
+    public static final String USER_SIGNIN_SUCCESS = "근로자 로그인 성공";
     public static final String USER_SIGNUP_SUCCESS = "근로자 회원가입 성공";
+    public static final String USER_LOGOUT_SUCCESS = "근로자 로그아웃 성공";
     public static final String USER_MAPPING_SITE = "근로자 현장 코드 입력 완료";
     public static final String EDIT_USER_INFO = "근로자 개인 정보 수정 완료";
     public static final String USER_INFO = "유저 개인정보 조회 완료";

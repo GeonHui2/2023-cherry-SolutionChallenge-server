@@ -14,14 +14,14 @@ public class AdminUtilsImpl implements AdminUtils{
     private final AdminRepository adminRepository;
 
     @Override
-    public Admin getAdminById(Long id) {
-        return adminRepository.findById(id).orElseThrow(() -> AdminNotFoundException.EXCEPTION);
+    public Admin getAdminByEmail(String email) {
+        return adminRepository.findByAdminEmail(email).orElseThrow(() -> AdminNotFoundException.EXCEPTION);
     }
 
     @Override
     public Admin getAdminFromSecurityContext() {
-        Long adminId = SecurityUtils.getCurrentAdminId();
-        Admin admin = getAdminById(adminId);
+        String currentAdminEmail = SecurityUtils.getCurrentAdminId();
+        Admin admin = getAdminByEmail(currentAdminEmail);
         return admin;
     }
 }

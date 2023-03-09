@@ -4,6 +4,7 @@ import GDSCSCH.cherry.domain.admin.domain.Admin;
 import GDSCSCH.cherry.domain.siteCheck.domain.SiteCheck;
 import GDSCSCH.cherry.domain.siteInfo.domain.vo.SiteInfoVo;
 import GDSCSCH.cherry.domain.siteInfo.exception.NotAdminException;
+import GDSCSCH.cherry.domain.siteInfo.presentation.dto.request.UpdateSiteInfoRequest;
 import GDSCSCH.cherry.domain.siteInfo.service.dto.UpdateSiteInfoDto;
 import GDSCSCH.cherry.domain.user.domain.User;
 import lombok.Builder;
@@ -41,7 +42,7 @@ public class SiteInfo {
     @OneToOne(fetch = LAZY, mappedBy = "siteInfo")
     private Admin admin;
 
-    @OneToMany(mappedBy = "siteInfo")
+    @OneToMany(mappedBy = "siteInfo", cascade = CascadeType.ALL)
     private List<SiteCheck> siteCheckList = new ArrayList<>();
 
     @Builder
@@ -65,10 +66,10 @@ public class SiteInfo {
     }
 
     //현장 정보 수정
-    public void updateSiteInfo(UpdateSiteInfoDto updateSiteInfoDto) {
-        this.siteName = updateSiteInfoDto.getSiteName();
-        this.siteLatitude = updateSiteInfoDto.getSiteLatitude();
-        this.siteLongitude = updateSiteInfoDto.getSiteLongitude();
+    public void updateSiteInfo(UpdateSiteInfoRequest updateSiteInfoRequest) {
+        this.siteName = updateSiteInfoRequest.getSiteName();
+        this.siteLatitude = updateSiteInfoRequest.getSiteLatitude();
+        this.siteLongitude = updateSiteInfoRequest.getSiteLongitude();
     }
 
     //관리자확인

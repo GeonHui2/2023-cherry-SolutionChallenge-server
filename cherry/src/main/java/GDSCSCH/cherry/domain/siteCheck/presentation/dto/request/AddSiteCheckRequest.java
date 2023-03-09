@@ -10,4 +10,7 @@ public class AddSiteCheckRequest {
 
     private Long siteId;
     private String siteQuestion;
+
+    public AddSiteCheckRequest() {
+    }
 }

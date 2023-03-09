@@ -7,19 +7,19 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 public class SecurityUtils {
 
-    public static Long getCurrentUserId() {
+    public static String getCurrentUserId() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null) {
             throw UserNotFoundException.EXCEPTION;
         }
-        return Long.valueOf(authentication.getName());
+        return authentication.getName();
     }
 
-    public static Long getCurrentAdminId() {
+    public static String getCurrentAdminId() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null) {
             throw AdminNotFoundException.EXCEPTION;
         }
-        return Long.valueOf(authentication.getName());
+        return authentication.getName();
     }
 }

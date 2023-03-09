@@ -4,7 +4,7 @@ import GDSCSCH.cherry.domain.admin.domain.Admin;
 
 public interface AdminUtils {
 
-    Admin getAdminById(Long id);
+    Admin getAdminByEmail(String email);
 
     Admin getAdminFromSecurityContext();
 }

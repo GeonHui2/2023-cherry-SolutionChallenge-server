@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 import javax.validation.constraints.NotNull;
 
 @Getter
-@AllArgsConstructor
+@NoArgsConstructor
 public class UpdateSiteInfoRequest {
 
     @NotNull
@@ -20,12 +20,4 @@ public class UpdateSiteInfoRequest {
 
     @NotNull
     private Double siteLongitude;
-
-    public UpdateSiteInfoDto updateSiteInfoDto() {
-        return UpdateSiteInfoDto.builder()
-                .siteName(siteName)
-                .siteLatitude(siteLatitude)
-                .siteLongitude(siteLongitude)
-                .build();
-    }
 }

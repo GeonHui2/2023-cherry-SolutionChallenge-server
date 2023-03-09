@@ -12,14 +12,12 @@ import GDSCSCH.cherry.domain.siteInfo.presentation.dto.response.SiteInfoResponse
 import GDSCSCH.cherry.domain.user.domain.User;
 import GDSCSCH.cherry.domain.user.domain.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;

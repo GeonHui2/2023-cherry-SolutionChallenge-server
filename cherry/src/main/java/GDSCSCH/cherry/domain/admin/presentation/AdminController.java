@@ -1,25 +1,31 @@
 package GDSCSCH.cherry.domain.admin.presentation;
 
-import GDSCSCH.cherry.domain.admin.domain.Role;
 import GDSCSCH.cherry.domain.admin.presentation.dto.request.AdminSignUp;
 import GDSCSCH.cherry.domain.admin.presentation.dto.request.ChangeAdminInfoRequest;
+import GDSCSCH.cherry.domain.admin.presentation.dto.request.ChangeRole;
 import GDSCSCH.cherry.domain.admin.presentation.dto.response.AdminProfileResponse;
 import GDSCSCH.cherry.domain.admin.service.AdminService;
 import GDSCSCH.cherry.domain.user.presentation.dto.response.AcceptUserList;
 import GDSCSCH.cherry.domain.user.presentation.dto.response.UserDetailInfoResponse;
 import GDSCSCH.cherry.domain.user.presentation.dto.response.UserHelmetListResponse;
 import GDSCSCH.cherry.domain.user.service.UserService;
+import GDSCSCH.cherry.global.security.oauth.TokenVerifierer;
 import GDSCSCH.cherry.global.successResponse.StatusCode;
 import GDSCSCH.cherry.global.successResponse.SuccessResponse;
 import GDSCSCH.cherry.global.successResponse.SuccessResponseMessage;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.util.List;
 
 import static GDSCSCH.cherry.global.successResponse.StatusCode.OK;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/admin")
@@ -27,20 +33,57 @@ public class AdminController {
 
     private final AdminService adminService;
     private final UserService userService;
+    private final TokenVerifierer tokenVerifierer;
+
+
+    //관리자 로그인
+    @PostMapping("/signIn")
+    public ResponseEntity userSignIn(@RequestParam String idToken, HttpServletResponse response) throws GeneralSecurityException, IOException {
+        String email = tokenVerifierer.tokenVerify(idToken);
+
+        Long adminId = adminService.signIn(email, response);
+
+        return SuccessResponse.successtoResponseEntity(OK, adminId, SuccessResponseMessage.ADMIN_SIGNIN_SUCCESS);
+    }
+
+    //테스트 로그인
+    @PostMapping("/testSignIn")
+    public ResponseEntity testSignIn(@RequestParam String email, HttpServletResponse response) {
+        Long adminId = adminService.signIn(email, response);
+
+        return SuccessResponse.successtoResponseEntity(OK, adminId, SuccessResponseMessage.ADMIN_SIGNIN_SUCCESS);
+    }
 
     //관리자 회원가입
     @PostMapping("/signUp")
-    public ResponseEntity adminSingUp(@RequestBody AdminSignUp signUp) {
+    public ResponseEntity userSignUp(@RequestParam String idToken, @RequestBody AdminSignUp adminSignUp, HttpServletResponse response) throws GeneralSecurityException, IOException {
+        String email = tokenVerifierer.tokenVerify(idToken);
+        log.info("email={}",email);
+        Long adminId = adminService.signUp(email, adminSignUp, response);
 
-        adminService.signUpAdmin(signUp);
+        return SuccessResponse.successtoResponseEntity(OK, adminId, SuccessResponseMessage.ADMIN_SIGNUP_SUCCESS);
+    }
 
-        return SuccessResponse.successtoResponseEntity(StatusCode.OK, null, SuccessResponseMessage.ADMIN_SIGNUP_SUCCESS);
+    //테스트 회원가입
+    @PostMapping("/testSignUp")
+    public ResponseEntity testSignUp(@RequestParam String email, @RequestBody AdminSignUp adminSignUp, HttpServletResponse response) {
+        Long adminId = adminService.signUp(email, adminSignUp, response);
+
+        return SuccessResponse.successtoResponseEntity(OK, adminId, SuccessResponseMessage.ADMIN_SIGNUP_SUCCESS);
+    }
+
+    //로그아웃
+    @PostMapping("/logout")
+    public ResponseEntity logout(@RequestHeader("RefreshToken") String refreshToken) {
+        boolean result = adminService.logout(refreshToken);
+
+        return SuccessResponse.successtoResponseEntity(OK, result, SuccessResponseMessage.ADMIN_LOGOUT_SUCCESS);
     }
 
     //관리자 개인정보 수정
-    @PatchMapping("/editInfo/{adminId}")
-    public ResponseEntity changeAdminInfo(@PathVariable("adminId") Long adminId, @RequestBody ChangeAdminInfoRequest changeAdminInfo) {
-        adminService.changeAdminInfo(changeAdminInfo, adminId);
+    @PatchMapping("/editInfo")
+    public ResponseEntity changeAdminInfo(@RequestBody ChangeAdminInfoRequest changeAdminInfo) {
+        adminService.changeAdminInfo(changeAdminInfo);
 
         return SuccessResponse.successtoResponseEntity(StatusCode.OK, null, SuccessResponseMessage.EDIT_ADMIN_INFO);
     }
@@ -79,8 +122,8 @@ public class AdminController {
 
     //근로자 권한 변경
     @PatchMapping("/acceptUser/{userId}")
-    public ResponseEntity changeUserRole(@PathVariable("userId") Long userId, @RequestBody Role role) {
-        userService.changeUserRole(userId, role);
+    public ResponseEntity changeUserRole(@PathVariable("userId") Long userId, @RequestBody ChangeRole changeRole) {
+        userService.changeUserRole(userId, changeRole.getRole());
 
         return SuccessResponse.successtoResponseEntity(OK, null, SuccessResponseMessage.EDIT_USER_ROLE);
     }

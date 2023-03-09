@@ -25,7 +25,7 @@ public class SiteCheck {
     private String siteQuestion;
     private boolean siteAnswer;
 
-    @ManyToOne (fetch = LAZY,cascade = CascadeType.REMOVE)
+    @ManyToOne (fetch = LAZY)
     @JoinColumn(name = "site_info_id")
     private SiteInfo siteInfo;
 

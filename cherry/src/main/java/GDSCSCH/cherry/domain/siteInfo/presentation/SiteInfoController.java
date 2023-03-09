@@ -55,8 +55,8 @@ public class SiteInfoController {
     }
 
     //현장 코드 유효 여부 조회
-    @GetMapping("/valid")
-    public ResponseEntity checkValidSiteCode(@RequestBody String siteCode) {
+    @GetMapping("/valid/{siteCode}")
+    public ResponseEntity checkValidSiteCode(@PathVariable("siteCode") String siteCode) {
         boolean result = siteInfoService.checkValidSiteCode(siteCode);
 
         return SuccessResponse.successtoResponseEntity(OK, result, SuccessResponseMessage.VALID_SITE_CODE);
