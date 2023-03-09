@@ -1,15 +1,15 @@
 package GDSCSCH.cherry.domain.siteCheck.service;
 
-import GDSCSCH.cherry.domain.admin.domain.Admin;
 import GDSCSCH.cherry.domain.defaultSiteCheck.domain.DefaultSiteCheck;
 import GDSCSCH.cherry.domain.defaultSiteCheck.repository.DefaultSiteCheckRepository;
 import GDSCSCH.cherry.domain.siteCheck.domain.SiteCheck;
-import GDSCSCH.cherry.domain.siteCheck.domain.repository.SiteCheckRepository;
+
 import GDSCSCH.cherry.domain.siteCheck.exception.SiteCheckNotFoundException;
 import GDSCSCH.cherry.domain.siteCheck.presentation.dto.request.AddSiteCheckRequest;
 import GDSCSCH.cherry.domain.siteCheck.presentation.dto.request.ChangeCheckQuestionRequest;
 import GDSCSCH.cherry.domain.siteCheck.presentation.dto.request.UpdateSiteCheckAnswerRequest;
 import GDSCSCH.cherry.domain.siteCheck.presentation.dto.response.SiteCheckResponse;
+import GDSCSCH.cherry.domain.siteCheck.domain.repository.SiteCheckRepository;
 import GDSCSCH.cherry.domain.siteInfo.domain.SiteInfo;
 import GDSCSCH.cherry.domain.siteInfo.domain.repository.SiteInfoRepository;
 import GDSCSCH.cherry.domain.siteInfo.exception.SiteInfoNotFoundException;
@@ -78,7 +78,6 @@ public class SiteCheckService {
     //현장 체크 리스트 상태 수정
     @Transactional
     public void updateSiteCheckAnswer(UpdateSiteCheckAnswerRequest updateSiteCheckAnswerRequest, Long siteCheckId) {
-        Admin admin = adminUtils.getAdminFromSecurityContext();
 
         SiteCheck siteCheck = findSiteCheck(siteCheckId);
         siteCheck.updateSiteCheckAnswer(updateSiteCheckAnswerRequest.isAnswer());

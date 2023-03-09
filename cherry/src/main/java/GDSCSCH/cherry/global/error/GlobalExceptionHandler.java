@@ -77,26 +77,4 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                         request.getRequestURL().toString());
         return ResponseEntity.status(HttpStatus.valueOf(code.getStatus())).body(errorResponse);
     }
-
-//    @ExceptionHandler(Exception.class)
-//    protected ResponseEntity<ErrorResponse> handleException(Exception e, HttpServletRequest request)
-//            throws IOException {
-//        final ContentCachingRequestWrapper cachingRequest = (ContentCachingRequestWrapper) request;
-//        String url =
-//                UriComponentsBuilder.fromHttpRequest(new ServletServerHttpRequest(request))
-//                        .build()
-//                        .toUriString();
-//
-//        log.error("INTERNAL_SERVER_ERROR", e);
-//        ErrorCode internalServerError = ErrorCode.INTERNAL_SERVER_ERROR;
-//        ErrorResponse errorResponse =
-//                new ErrorResponse(
-//                        internalServerError.getStatus(),
-//                        internalServerError.getCode(),
-//                        internalServerError.getReason(),
-//                        url);
-//        //slackProvider.sendError(url, cachingRequest, e);
-//        return ResponseEntity.status(HttpStatus.valueOf(internalServerError.getStatus()))
-//                .body(errorResponse);
-//    }
 }

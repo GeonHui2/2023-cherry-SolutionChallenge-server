@@ -2,6 +2,7 @@ package GDSCSCH.cherry.domain.defaultSiteCheck.service;
 
 import GDSCSCH.cherry.domain.defaultSiteCheck.domain.DefaultSiteCheck;
 import GDSCSCH.cherry.domain.defaultSiteCheck.exception.DefaultSiteCheckNotFoundException;
+import GDSCSCH.cherry.domain.defaultSiteCheck.presentation.dto.request.ChangeDefaultCheckQuestionRequest;
 import GDSCSCH.cherry.domain.defaultSiteCheck.repository.DefaultSiteCheckRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,10 +29,10 @@ public class DefaultSiteCheckService {
 
     //기본 현장 체크 리스트 수정
     @Transactional
-    public void editDefaultCheck(String changeQuestion, Long id) {
+    public void editDefaultCheck(ChangeDefaultCheckQuestionRequest changeQuestion, Long id) {
         DefaultSiteCheck defaultCheck = findDefaultCheck(id);
 
-        defaultCheck.changeQuestion(changeQuestion);
+        defaultCheck.changeQuestion(changeQuestion.getQuestion());
     }
 
     // 기본 현장 체크 리스트 삭제

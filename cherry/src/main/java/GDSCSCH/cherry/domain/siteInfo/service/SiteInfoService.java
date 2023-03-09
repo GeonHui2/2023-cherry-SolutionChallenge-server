@@ -68,9 +68,7 @@ public class SiteInfoService implements SiteInfoUtils{
 
         SiteInfo site = findSiteInfo(siteId);
 
-        site.validAdminIsHost(admin.getId());
-
-        site.updateSiteInfo(updateSiteInfoRequest.updateSiteInfoDto());
+        site.updateSiteInfo(updateSiteInfoRequest);
     }
 
     //현장 정보 삭제
@@ -79,7 +77,6 @@ public class SiteInfoService implements SiteInfoUtils{
         Admin admin = adminUtils.getAdminFromSecurityContext();
 
         SiteInfo site = findSiteInfo(siteId);
-        site.validAdminIsHost(admin.getId());
 
         admin.subSiteInfo();
         List<User> userList = userRepository.findAllBySiteInfo(site);

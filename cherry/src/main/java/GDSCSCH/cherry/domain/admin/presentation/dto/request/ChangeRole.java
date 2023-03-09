@@ -1,5 +1,6 @@
 package GDSCSCH.cherry.domain.admin.presentation.dto.request;
 
+import GDSCSCH.cherry.domain.admin.domain.Role;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -7,9 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class AdminSignUp {
+public class ChangeRole {
 
-    private String adminName;
-    private String adminPhoneNum;
-    private int adminAge;
+    private Role role;
 }

@@ -7,9 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class UserSignUp {
+public class GrantSiteInfo {
 
-    private String userName;
-    private String userPhoneNum;
-    private Integer userAge;
+    private String siteCode;
 }

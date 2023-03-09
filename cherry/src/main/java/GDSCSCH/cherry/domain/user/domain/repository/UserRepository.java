@@ -10,7 +10,7 @@ import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User, Long> {
 
-    Optional<User> findBySiteInfoAndRoleEquals(SiteInfo siteInfo, Role role);
+    Optional<User> findByUserEmail(String userEmail);
     List<User> findAllBySiteInfo(SiteInfo siteInfo);
 
     List<User> findAllBySiteInfoAndUserHelmetCheck(SiteInfo siteInfo, boolean userHelmetCheck);

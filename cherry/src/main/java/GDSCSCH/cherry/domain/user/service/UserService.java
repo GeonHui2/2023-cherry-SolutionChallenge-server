@@ -1,6 +1,9 @@
 package GDSCSCH.cherry.domain.user.service;
 
+import GDSCSCH.cherry.domain.admin.domain.RefreshToken;
 import GDSCSCH.cherry.domain.admin.domain.Role;
+import GDSCSCH.cherry.domain.admin.domain.repository.RefreshTokenRepository;
+import GDSCSCH.cherry.domain.user.presentation.dto.request.UserSignUp;
 import GDSCSCH.cherry.domain.user.presentation.dto.response.AcceptUserList;
 import GDSCSCH.cherry.domain.siteInfo.domain.SiteInfo;
 import GDSCSCH.cherry.domain.siteInfo.domain.repository.SiteInfoRepository;
@@ -8,17 +11,18 @@ import GDSCSCH.cherry.domain.siteInfo.exception.SiteInfoNotFoundException;
 import GDSCSCH.cherry.domain.user.domain.User;
 import GDSCSCH.cherry.domain.user.domain.repository.UserRepository;
 import GDSCSCH.cherry.domain.user.presentation.dto.request.ChangeUserInfoRequest;
-import GDSCSCH.cherry.domain.user.presentation.dto.request.UserSignUp;
 import GDSCSCH.cherry.domain.user.presentation.dto.response.UserDetailInfoResponse;
 import GDSCSCH.cherry.domain.user.presentation.dto.response.UserHelmetListResponse;
 import GDSCSCH.cherry.domain.user.presentation.dto.response.UserInfoResponse;
 import GDSCSCH.cherry.domain.user.presentation.dto.response.UserProfileResponse;
+import GDSCSCH.cherry.global.security.jwt.JwtTokenProvider;
 import GDSCSCH.cherry.global.utils.user.UserUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,26 +37,59 @@ public class UserService {
     private final UserRepository userRepository;
     private final SiteInfoRepository siteInfoRepository;
     private final UserUtils userUtils;
+    private final JwtTokenProvider jwtTokenProvider;
+    private final RefreshTokenRepository refreshTokenRepository;
 
-    //유저 회원가입
+
+    //로그인
     @Transactional
-    public Long signUpUser(UserSignUp userSignUp) {
-        User user = User.createUser(
-                userSignUp.getUserName(),
-                userSignUp.getUserEmail(),
-                userSignUp.getUserPhoneNum(),
-                userSignUp.getUserAge()
-        );
+    public Long signIn (String email, HttpServletResponse response) {
 
-        userRepository.save(user);
+        User user = findUser(email);
+        createToken(email, response);
+        log.info(user.getUserEmail() + " (id : " + user.getId() + ") login");
 
         return user.getId();
     }
 
+    //회원가입 및 로그인
+    @Transactional
+    public Long signUp (String email, UserSignUp signUp, HttpServletResponse response) {
+
+        if(userRepository.findByUserEmail(email).isEmpty()) {
+
+            User user = User.createUser(
+                    signUp.getUserName(),
+                    email,
+                    signUp.getUserPhoneNum(),
+                    signUp.getUserAge()
+            );
+
+            userRepository.save(user);
+
+            // 어세스, 리프레시 토큰 발급 및 헤더 설정
+            createToken(email, response);
+            log.info(user.getUserEmail() + " (id : " + user.getId() + ") login");
+            return user.getId();
+        }
+        return null;
+    }
+
+    // 로그아웃
+    @Transactional
+    public boolean logout(String refreshToken) {
+        if (!refreshTokenRepository.existsByRefreshToken(refreshToken))
+            return false;
+
+        refreshTokenRepository.deleteByRefreshToken(refreshToken);
+
+        return true;
+    }
+
     //유저 개인정보 수정
     @Transactional
-    public void changeUserInfo(ChangeUserInfoRequest changeUserInfo, Long userId) {
-        User user = userUtils.getUserById(userId);
+    public void changeUserInfo(ChangeUserInfoRequest changeUserInfo) {
+        User user = userUtils.getUserFromSecurityContext();
 
         user.changeUserInfo(
                 changeUserInfo.getUserName(),
@@ -64,7 +101,7 @@ public class UserService {
     //근로자 삭제
     @Transactional
     public void deleteUser(Long userId) {
-        User user = userUtils.getUserById(userId);
+        User user = findUserById(userId);
 
         SiteInfo site = siteInfoRepository.findById(user.getSiteInfo().getId()).orElseThrow(() -> SiteInfoNotFoundException.EXCEPTION);
         site.subUser(user);
@@ -73,7 +110,7 @@ public class UserService {
 
     //유저 개인정보 조회
     public UserProfileResponse getProfile(Long userId) {
-        User user = userUtils.getUserById(userId);
+        User user = findUserById(userId);
 
         return new UserProfileResponse(user.getUserInfo());
     }
@@ -111,7 +148,7 @@ public class UserService {
 
     //유저 개인정보 상세 조회
     public UserDetailInfoResponse getDetailInfo(Long userId) {
-        User user = userUtils.getUserById(userId);
+        User user = findUserById(userId);
 
         return new UserDetailInfoResponse(user.getUserInfo());
     }
@@ -127,29 +164,29 @@ public class UserService {
     //게스트 권한 근로자로 권한 승인
     @Transactional
     public void acceptRoleToUser(Long userId) {
-        User user = userUtils.getUserById(userId);
+        User user = findUserById(userId);
         user.changeRole(USER);
     }
 
     //근로자 권한 변경
     @Transactional
     public void changeUserRole(Long userId, Role role) {
-        User user = userUtils.getUserById(userId);
+        User user = findUserById(userId);
         user.changeRole(role);
     }
 
     //근로자 현장 코드 입력
     @Transactional
-    public void mappingSite(String siteCode, Long userId) {
-        User user = userUtils.getUserById(userId);
+    public void mappingSite(String siteCode) {
+        User user = userUtils.getUserFromSecurityContext();
 
         SiteInfo site = siteInfoRepository.findBySiteCode(siteCode).orElseThrow(() -> SiteInfoNotFoundException.EXCEPTION);
         site.addUser(user);
     }
 
     //근로자 안전모 착용 유무 조회
-    public boolean checkHelmet(Long userId) {
-        User user = userUtils.getUserById(userId);
+    public boolean checkHelmet() {
+        User user = userUtils.getUserFromSecurityContext();
         return user.isUserHelmetCheck();
     }
 
@@ -158,5 +195,27 @@ public class UserService {
     public void updateHelmetCheck(boolean helmetCheck) {
         User user = userUtils.getUserFromSecurityContext();
         user.changeHelmetCheck(helmetCheck);
+    }
+
+    private void createToken(String email, HttpServletResponse response) {
+        String accessToken = jwtTokenProvider.createAccessToken(email, Role.ADMIN);
+        String refreshToken = jwtTokenProvider.createRefreshToken(email, Role.ADMIN);
+
+        jwtTokenProvider.setHeaderAccessToken(response, accessToken);
+        jwtTokenProvider.setHeaderRefreshToken(response, refreshToken);
+
+        refreshTokenRepository.save(new RefreshToken(refreshToken));
+    }
+
+    public User findUser(String email) {
+        return userRepository
+                .findByUserEmail(email)
+                .orElseThrow(() -> new RuntimeException("회원이 존재하지 않습니다"));
+    }
+
+    public User findUserById(Long id) {
+        return userRepository
+                .findById(id)
+                .orElseThrow(() -> new RuntimeException("회원이 존재하지 않습니다"));
     }
 }

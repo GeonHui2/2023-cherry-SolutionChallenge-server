@@ -2,14 +2,10 @@ package GDSCSCH.cherry.domain.user.presentation.dto.request;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Getter
-@Setter
 @NoArgsConstructor
-public class UserSignUp {
+public class ChangeHelmetCheck {
 
-    private String userName;
-    private String userPhoneNum;
-    private Integer userAge;
+    private boolean helmetCheck;
 }
