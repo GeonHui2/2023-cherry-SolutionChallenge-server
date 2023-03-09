@@ -20,4 +20,7 @@ public class UpdateSiteInfoRequest {
 
     @NotNull
     private Double siteLongitude;
+
+    public UpdateSiteInfoRequest(String siteName, double siteLatitude, double siteLongitude) {
+    }
 }

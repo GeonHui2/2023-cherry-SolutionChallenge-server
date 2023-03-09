@@ -111,7 +111,7 @@ class SiteInfoServiceTest {
 
         //when
         UpdateSiteInfoRequest updateSiteInfoRequest = new UpdateSiteInfoRequest("site1", 12.1, 115.1);
-        site.updateSiteInfo(updateSiteInfoRequest.updateSiteInfoDto());
+        site.updateSiteInfo(updateSiteInfoRequest);
 
         //then
         log.info("site.name = {}", site.getSiteName());
