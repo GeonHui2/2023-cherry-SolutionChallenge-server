@@ -82,6 +82,6 @@ public class User {
     }
 
     public UserInfoVo getUserInfo() {
-        return new UserInfoVo(id, userName, userEmail, userPhoneNum, userAge, role);
+        return new UserInfoVo(id, userName, userEmail, userPhoneNum, userAge, role, siteInfo);
     }
 }

@@ -1,6 +1,7 @@
 package GDSCSCH.cherry.domain.user.domain.vo;
 
 import GDSCSCH.cherry.domain.admin.domain.Role;
+import GDSCSCH.cherry.domain.siteInfo.domain.SiteInfo;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -14,4 +15,5 @@ public class UserInfoVo {
     private final String userPhoneNum;
     private final int userAge;
     private final Role role;
+    private final SiteInfo siteInfo;
 }

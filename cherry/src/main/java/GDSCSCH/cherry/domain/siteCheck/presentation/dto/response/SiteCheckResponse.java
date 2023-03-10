@@ -8,12 +8,12 @@ import lombok.Getter;
 @AllArgsConstructor
 public class SiteCheckResponse {
 
-    private final Long siteId;
+    private final Long checkId;
     private final String siteQuestion;
     private final boolean siteAnswer;
 
     public SiteCheckResponse(SiteCheckInfoVo siteCheckInfoVo) {
-        this.siteId  = siteCheckInfoVo.getCheckId();
+        this.checkId = siteCheckInfoVo.getCheckId();
         this.siteQuestion = siteCheckInfoVo.getSiteQuestion();
         this.siteAnswer = siteCheckInfoVo.isSiteAnswer();
     }

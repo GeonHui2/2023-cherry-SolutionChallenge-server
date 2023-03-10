@@ -12,11 +12,15 @@ public class SiteInfoResponse {
     private String siteName;
     private Double siteLatitude;
     private Double siteLongitude;
+    private String address1;
+    private String address2;
 
     public SiteInfoResponse(SiteInfoVo siteInfoVo) {
         siteCode = siteInfoVo.getSiteCode();
         siteName = siteInfoVo.getSiteName();
         siteLatitude = siteInfoVo.getSiteLatitude();
         siteLongitude = siteInfoVo.getSiteLongitude();
+        address1 = siteInfoVo.getAddress1();
+        address2 = siteInfoVo.getAddress2();
     }
 }
