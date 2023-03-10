@@ -35,6 +35,8 @@ public class SiteInfo {
     private String siteName;
     private Double siteLatitude;
     private Double siteLongitude;
+    private String address1;
+    private String address2;
 
     @OneToMany(mappedBy = "siteInfo")
     private List<User> userList = new ArrayList<>();
@@ -46,21 +48,25 @@ public class SiteInfo {
     private List<SiteCheck> siteCheckList = new ArrayList<>();
 
     @Builder
-    public SiteInfo(String siteCode, String siteName, Double siteLatitude, Double siteLongitude, Admin admin) {
+    public SiteInfo(String siteCode, String siteName, Double siteLatitude, Double siteLongitude, String address1, String address2, Admin admin) {
         this.siteCode = siteCode;
         this.siteName = siteName;
         this.siteLatitude = siteLatitude;
         this.siteLongitude = siteLongitude;
+        this.address1 = address1;
+        this.address2 = address2;
         this.admin = admin;
     }
 
     //생성 메서드
-    public static SiteInfo createSiteInfo(String siteName, Double siteLatitude, Double siteLongitude, Admin admin) {
+    public static SiteInfo createSiteInfo(String siteName, Double siteLatitude, Double siteLongitude, String address1, String address2, Admin admin) {
         return builder()
                 .siteCode(UUID.randomUUID().toString().substring(0, 8))
                 .siteName(siteName)
                 .siteLatitude(siteLatitude)
                 .siteLongitude(siteLongitude)
+                .address1(address1)
+                .address2(address2)
                 .admin(admin)
                 .build();
     }
@@ -86,6 +92,8 @@ public class SiteInfo {
                 .siteName(siteName)
                 .siteLatitude(siteLatitude)
                 .siteLongitude(siteLongitude)
+                .address1(address1)
+                .address2(address2)
                 .build();
     }
 

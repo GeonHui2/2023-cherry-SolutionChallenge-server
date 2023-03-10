@@ -5,10 +5,7 @@ import GDSCSCH.cherry.domain.user.presentation.dto.request.ChangeHelmetCheck;
 import GDSCSCH.cherry.domain.user.presentation.dto.request.ChangeUserInfoRequest;
 import GDSCSCH.cherry.domain.user.presentation.dto.request.GrantSiteInfo;
 import GDSCSCH.cherry.domain.user.presentation.dto.request.UserSignUp;
-import GDSCSCH.cherry.domain.user.presentation.dto.response.AcceptUserList;
-import GDSCSCH.cherry.domain.user.presentation.dto.response.UserDetailInfoResponse;
-import GDSCSCH.cherry.domain.user.presentation.dto.response.UserHelmetListResponse;
-import GDSCSCH.cherry.domain.user.presentation.dto.response.UserProfileResponse;
+import GDSCSCH.cherry.domain.user.presentation.dto.response.*;
 import GDSCSCH.cherry.domain.user.service.UserService;
 import GDSCSCH.cherry.global.security.oauth.TokenVerifierer;
 import GDSCSCH.cherry.global.successResponse.StatusCode;
@@ -39,17 +36,17 @@ public class UserController {
     public ResponseEntity userSignIn(@RequestParam String idToken, HttpServletResponse response) throws GeneralSecurityException, IOException {
         String email = tokenVerifierer.tokenVerify(idToken);
 
-        Long userId = userService.signIn(email, response);
+        UserSignInResponse result = userService.signIn(email, response);
 
-        return SuccessResponse.successtoResponseEntity(OK, userId, SuccessResponseMessage.USER_SIGNIN_SUCCESS);
+        return SuccessResponse.successtoResponseEntity(OK, result, SuccessResponseMessage.USER_SIGNIN_SUCCESS);
     }
 
     //테스트 로그인
     @PostMapping("/testSignIn")
     public ResponseEntity testSignIn(@RequestParam String email, HttpServletResponse response) {
-        Long userId = userService.signIn(email, response);
+        UserSignInResponse result = userService.signIn(email, response);
 
-        return SuccessResponse.successtoResponseEntity(OK, userId, SuccessResponseMessage.USER_SIGNIN_SUCCESS);
+        return SuccessResponse.successtoResponseEntity(OK, result, SuccessResponseMessage.USER_SIGNIN_SUCCESS);
     }
 
     //유저 회원가입

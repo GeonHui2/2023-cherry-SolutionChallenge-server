@@ -42,6 +42,8 @@ public class SiteInfoService implements SiteInfoUtils{
                 addSiteInfoRequest.getSiteName(),
                 addSiteInfoRequest.getSiteLatitude(),
                 addSiteInfoRequest.getSiteLongitude(),
+                addSiteInfoRequest.getAddress1(),
+                addSiteInfoRequest.getAddress2(),
                 currentAdmin
         );
 

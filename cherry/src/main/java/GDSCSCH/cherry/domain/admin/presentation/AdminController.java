@@ -4,6 +4,7 @@ import GDSCSCH.cherry.domain.admin.presentation.dto.request.AdminSignUp;
 import GDSCSCH.cherry.domain.admin.presentation.dto.request.ChangeAdminInfoRequest;
 import GDSCSCH.cherry.domain.admin.presentation.dto.request.ChangeRole;
 import GDSCSCH.cherry.domain.admin.presentation.dto.response.AdminProfileResponse;
+import GDSCSCH.cherry.domain.admin.presentation.dto.response.AdminSignInResponse;
 import GDSCSCH.cherry.domain.admin.service.AdminService;
 import GDSCSCH.cherry.domain.user.presentation.dto.response.AcceptUserList;
 import GDSCSCH.cherry.domain.user.presentation.dto.response.UserDetailInfoResponse;
@@ -41,17 +42,17 @@ public class AdminController {
     public ResponseEntity userSignIn(@RequestParam String idToken, HttpServletResponse response) throws GeneralSecurityException, IOException {
         String email = tokenVerifierer.tokenVerify(idToken);
 
-        Long adminId = adminService.signIn(email, response);
+        AdminSignInResponse result = adminService.signIn(email, response);
 
-        return SuccessResponse.successtoResponseEntity(OK, adminId, SuccessResponseMessage.ADMIN_SIGNIN_SUCCESS);
+        return SuccessResponse.successtoResponseEntity(OK, result, SuccessResponseMessage.ADMIN_SIGNIN_SUCCESS);
     }
 
     //테스트 로그인
     @PostMapping("/testSignIn")
     public ResponseEntity testSignIn(@RequestParam String email, HttpServletResponse response) {
-        Long adminId = adminService.signIn(email, response);
+        AdminSignInResponse result = adminService.signIn(email, response);
 
-        return SuccessResponse.successtoResponseEntity(OK, adminId, SuccessResponseMessage.ADMIN_SIGNIN_SUCCESS);
+        return SuccessResponse.successtoResponseEntity(OK, result, SuccessResponseMessage.ADMIN_SIGNIN_SUCCESS);
     }
 
     //관리자 회원가입

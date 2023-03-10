@@ -8,6 +8,9 @@ import GDSCSCH.cherry.domain.admin.domain.repository.RefreshTokenRepository;
 import GDSCSCH.cherry.domain.admin.presentation.dto.request.AdminSignUp;
 import GDSCSCH.cherry.domain.admin.presentation.dto.request.ChangeAdminInfoRequest;
 import GDSCSCH.cherry.domain.admin.presentation.dto.response.AdminProfileResponse;
+import GDSCSCH.cherry.domain.admin.presentation.dto.response.AdminSignInResponse;
+import GDSCSCH.cherry.domain.siteInfo.domain.SiteInfo;
+import GDSCSCH.cherry.domain.siteInfo.domain.repository.SiteInfoRepository;
 import GDSCSCH.cherry.global.exception.UserNotFoundException;
 import GDSCSCH.cherry.global.security.jwt.JwtTokenProvider;
 import GDSCSCH.cherry.global.utils.admin.AdminUtils;
@@ -26,19 +29,20 @@ public class AdminService {
 
     private final AdminRepository adminRepository;
     private final AdminUtils adminUtils;
+    private final SiteInfoRepository siteInfoRepository;
     private final JwtTokenProvider jwtTokenProvider;
     private final RefreshTokenRepository refreshTokenRepository;
 
 
     //로그인
     @Transactional
-    public Long signIn (String email, HttpServletResponse response) {
+    public AdminSignInResponse signIn (String email, HttpServletResponse response) {
 
         Admin admin = findAdmin(email);
         createToken(email, response);
         log.info(admin.getAdminEmail() + " (id : " + admin.getId() + ") login");
 
-        return admin.getId();
+        return new AdminSignInResponse(admin.getAdminInfo(), admin.getSiteInfo() == null ? false : true);
     }
 
     //회원가입 및 로그인

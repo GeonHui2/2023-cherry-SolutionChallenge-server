@@ -12,4 +12,6 @@ public class SiteInfoVo {
     private final String siteName;
     private final Double siteLatitude;
     private final Double siteLongitude;
+    private final String address1;
+    private final String address2;
 }

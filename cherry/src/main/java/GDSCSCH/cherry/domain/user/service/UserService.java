@@ -3,18 +3,15 @@ package GDSCSCH.cherry.domain.user.service;
 import GDSCSCH.cherry.domain.admin.domain.RefreshToken;
 import GDSCSCH.cherry.domain.admin.domain.Role;
 import GDSCSCH.cherry.domain.admin.domain.repository.RefreshTokenRepository;
+import GDSCSCH.cherry.domain.admin.presentation.dto.response.AdminSignInResponse;
 import GDSCSCH.cherry.domain.user.presentation.dto.request.UserSignUp;
-import GDSCSCH.cherry.domain.user.presentation.dto.response.AcceptUserList;
+import GDSCSCH.cherry.domain.user.presentation.dto.response.*;
 import GDSCSCH.cherry.domain.siteInfo.domain.SiteInfo;
 import GDSCSCH.cherry.domain.siteInfo.domain.repository.SiteInfoRepository;
 import GDSCSCH.cherry.domain.siteInfo.exception.SiteInfoNotFoundException;
 import GDSCSCH.cherry.domain.user.domain.User;
 import GDSCSCH.cherry.domain.user.domain.repository.UserRepository;
 import GDSCSCH.cherry.domain.user.presentation.dto.request.ChangeUserInfoRequest;
-import GDSCSCH.cherry.domain.user.presentation.dto.response.UserDetailInfoResponse;
-import GDSCSCH.cherry.domain.user.presentation.dto.response.UserHelmetListResponse;
-import GDSCSCH.cherry.domain.user.presentation.dto.response.UserInfoResponse;
-import GDSCSCH.cherry.domain.user.presentation.dto.response.UserProfileResponse;
 import GDSCSCH.cherry.global.security.jwt.JwtTokenProvider;
 import GDSCSCH.cherry.global.utils.user.UserUtils;
 import lombok.RequiredArgsConstructor;
@@ -43,13 +40,13 @@ public class UserService {
 
     //로그인
     @Transactional
-    public Long signIn (String email, HttpServletResponse response) {
+    public UserSignInResponse signIn (String email, HttpServletResponse response) {
 
         User user = findUser(email);
         createToken(email, response);
         log.info(user.getUserEmail() + " (id : " + user.getId() + ") login");
 
-        return user.getId();
+        return new UserSignInResponse(user.getUserInfo(), user.getSiteInfo() == null ? false : true);
     }
 
     //회원가입 및 로그인

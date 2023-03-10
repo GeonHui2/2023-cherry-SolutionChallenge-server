@@ -64,7 +64,7 @@ public class Admin {
     }
 
     public AdminInfoVo getAdminInfo() {
-        return new AdminInfoVo(id, adminName, adminPhoneNum, adminAge);
+        return new AdminInfoVo(id, adminName, adminPhoneNum, adminAge, role, siteInfo);
     }
 
     //== 연관 관계 메서드==//
