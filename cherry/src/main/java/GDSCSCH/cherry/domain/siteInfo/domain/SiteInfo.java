@@ -76,6 +76,8 @@ public class SiteInfo {
         this.siteName = updateSiteInfoRequest.getSiteName();
         this.siteLatitude = updateSiteInfoRequest.getSiteLatitude();
         this.siteLongitude = updateSiteInfoRequest.getSiteLongitude();
+        this.address1 = updateSiteInfoRequest.getAddress1();
+        this.address2 = updateSiteInfoRequest.getAddress2();
     }
 
     //관리자확인

@@ -41,7 +41,7 @@ public class AdminController {
     @PostMapping("/signIn")
     public ResponseEntity userSignIn(@RequestParam String idToken, HttpServletResponse response) throws GeneralSecurityException, IOException {
         String email = tokenVerifierer.tokenVerify(idToken);
-
+        log.info("email={}",email);
         AdminSignInResponse result = adminService.signIn(email, response);
 
         return SuccessResponse.successtoResponseEntity(OK, result, SuccessResponseMessage.ADMIN_SIGNIN_SUCCESS);
@@ -79,6 +79,14 @@ public class AdminController {
         boolean result = adminService.logout(refreshToken);
 
         return SuccessResponse.successtoResponseEntity(OK, result, SuccessResponseMessage.ADMIN_LOGOUT_SUCCESS);
+    }
+
+    //관리자 본인 현장 정보 조회
+    @GetMapping("/getSiteInfo")
+    public ResponseEntity getSiteInfo(@RequestParam String email) {
+        Long siteInfoId = adminService.getSiteInfo(email);
+
+        return SuccessResponse.successtoResponseEntity(OK, siteInfoId, SuccessResponseMessage.GET_ADMIN_SITEINFO);
     }
 
     //관리자 개인정보 수정

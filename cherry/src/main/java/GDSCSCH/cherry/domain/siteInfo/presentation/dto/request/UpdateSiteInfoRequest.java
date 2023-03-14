@@ -21,6 +21,9 @@ public class UpdateSiteInfoRequest {
     @NotNull
     private Double siteLongitude;
 
-    public UpdateSiteInfoRequest(String siteName, double siteLatitude, double siteLongitude) {
+    private String address1;
+    private String address2;
+
+    public UpdateSiteInfoRequest(String siteName, double siteLatitude, double siteLongitude, String address1, String address2) {
     }
 }

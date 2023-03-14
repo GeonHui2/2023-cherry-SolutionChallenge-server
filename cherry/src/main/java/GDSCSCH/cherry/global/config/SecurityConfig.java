@@ -23,8 +23,8 @@ public class SecurityConfig {
 
         http.authorizeRequests()
                 .expressionHandler(expressionHandler())
-                .antMatchers("/user/signIn", "/user/testSignIn", "/user/signUp", "/user/testSignUp",
-                        "/admin/signIn", "/admin/testSignIn", "/admin/signUp", "/admin/testSignUp",
+                .antMatchers("/user/signIn", "/user/testSignIn", "/user/signUp", "/user/testSignUp", "/user/getSiteInfo",
+                        "/admin/signIn", "/admin/testSignIn", "/admin/signUp", "/admin/testSignUp", "/admin/getSiteInfo",
                         "/defaultSiteCheck/createCheck", "/defaultSiteCheck/edit/{defaultCheckId}", "/defaultSiteCheck/{defaultCheckId}").permitAll()
                 .anyRequest()
                 .authenticated();

@@ -11,6 +11,7 @@ import GDSCSCH.cherry.domain.admin.presentation.dto.response.AdminProfileRespons
 import GDSCSCH.cherry.domain.admin.presentation.dto.response.AdminSignInResponse;
 import GDSCSCH.cherry.domain.siteInfo.domain.SiteInfo;
 import GDSCSCH.cherry.domain.siteInfo.domain.repository.SiteInfoRepository;
+import GDSCSCH.cherry.global.exception.AdminNotFoundException;
 import GDSCSCH.cherry.global.exception.UserNotFoundException;
 import GDSCSCH.cherry.global.security.jwt.JwtTokenProvider;
 import GDSCSCH.cherry.global.utils.admin.AdminUtils;
@@ -77,6 +78,13 @@ public class AdminService {
         refreshTokenRepository.deleteByRefreshToken(refreshToken);
 
         return true;
+    }
+
+    //관리자 본인 현장 정보 조회
+    public Long getSiteInfo(String email) {
+        Admin admin = adminRepository.findByAdminEmail(email).orElseThrow(() -> AdminNotFoundException.EXCEPTION);
+
+        return admin.getSiteInfo().getId();
     }
 
     //관리자 개인정보 수정

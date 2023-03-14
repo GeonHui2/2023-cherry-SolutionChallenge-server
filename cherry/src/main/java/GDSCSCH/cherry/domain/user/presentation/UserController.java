@@ -74,6 +74,14 @@ public class UserController {
         return SuccessResponse.successtoResponseEntity(OK, result, SuccessResponseMessage.USER_LOGOUT_SUCCESS);
     }
 
+    //관리자 본인 현장 정보 조회
+    @GetMapping("/getSiteInfo")
+    public ResponseEntity getSiteInfo(@RequestParam String email) {
+        Long siteInfoId = userService.getSiteInfo(email);
+
+        return SuccessResponse.successtoResponseEntity(OK, siteInfoId, SuccessResponseMessage.GET_USER_SITEINFO);
+    }
+
     //근로자 현장 코드 입력
     @PatchMapping("/acceptSite")
     public ResponseEntity mappingSite(@RequestBody GrantSiteInfo grantSiteInfo) {
