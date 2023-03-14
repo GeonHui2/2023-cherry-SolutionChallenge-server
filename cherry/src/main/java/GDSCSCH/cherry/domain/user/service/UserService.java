@@ -1,5 +1,6 @@
 package GDSCSCH.cherry.domain.user.service;
 
+import GDSCSCH.cherry.domain.admin.domain.Admin;
 import GDSCSCH.cherry.domain.admin.domain.RefreshToken;
 import GDSCSCH.cherry.domain.admin.domain.Role;
 import GDSCSCH.cherry.domain.admin.domain.repository.RefreshTokenRepository;
@@ -12,6 +13,8 @@ import GDSCSCH.cherry.domain.siteInfo.exception.SiteInfoNotFoundException;
 import GDSCSCH.cherry.domain.user.domain.User;
 import GDSCSCH.cherry.domain.user.domain.repository.UserRepository;
 import GDSCSCH.cherry.domain.user.presentation.dto.request.ChangeUserInfoRequest;
+import GDSCSCH.cherry.global.exception.AdminNotFoundException;
+import GDSCSCH.cherry.global.exception.UserNotFoundException;
 import GDSCSCH.cherry.global.security.jwt.JwtTokenProvider;
 import GDSCSCH.cherry.global.utils.user.UserUtils;
 import lombok.RequiredArgsConstructor;
@@ -81,6 +84,13 @@ public class UserService {
         refreshTokenRepository.deleteByRefreshToken(refreshToken);
 
         return true;
+    }
+
+    //유저 본인 현장 정보 조회
+    public Long getSiteInfo(String email) {
+        User user = userRepository.findByUserEmail(email).orElseThrow(() -> UserNotFoundException.EXCEPTION);
+
+        return user.getSiteInfo().getId();
     }
 
     //유저 개인정보 수정
@@ -207,12 +217,12 @@ public class UserService {
     public User findUser(String email) {
         return userRepository
                 .findByUserEmail(email)
-                .orElseThrow(() -> new RuntimeException("회원이 존재하지 않습니다"));
+                .orElseThrow(() -> new RuntimeException(UserNotFoundException.EXCEPTION));
     }
 
     public User findUserById(Long id) {
         return userRepository
                 .findById(id)
-                .orElseThrow(() -> new RuntimeException("회원이 존재하지 않습니다"));
+                .orElseThrow(() -> new RuntimeException(UserNotFoundException.EXCEPTION));
     }
 }

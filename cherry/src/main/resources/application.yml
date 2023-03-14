@@ -1,12 +1,12 @@
 spring:
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/cherry
-    username: root
-    password: 20181549
+    driver-class-name: org.mariadb.jdbc.Driver
+    url: jdbc:mariadb://15.165.78.237:3306/cherry?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
+    username: cherry
+    password: 20191531
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: validate
     properties:
       hibernate:
         format_sql: ture
@@ -34,4 +34,4 @@ jwt:
   secret: VlwEyVBsYt9V7zq57TejMnVUyzblYcfPQye08f7MGVA9XkHa
 
 google:
-  clientId: 213617031580-3bjijd93fo1fh4jekjo088s6qbb6p6rt.apps.googleusercontent.com
+  clientId: 452956723966-00n1usn3nhfnm4cj00eg162sodoe897b.apps.googleusercontent.com
