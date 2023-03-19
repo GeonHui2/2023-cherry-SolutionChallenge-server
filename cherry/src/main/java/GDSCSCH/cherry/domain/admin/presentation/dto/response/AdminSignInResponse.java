@@ -9,10 +9,12 @@ import lombok.Getter;
 @AllArgsConstructor
 public class AdminSignInResponse {
 
+    private Long id;
     private Role role;
     private boolean existSiteInfo;
 
     public AdminSignInResponse(AdminInfoVo adminInfoVo, boolean result) {
+        this.id = adminInfoVo.getAdminId();
         this.role = adminInfoVo.getRole();
         this.existSiteInfo = result;
     }

@@ -14,5 +14,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     List<User> findAllBySiteInfo(SiteInfo siteInfo);
 
     List<User> findAllBySiteInfoAndUserHelmetCheck(SiteInfo siteInfo, boolean userHelmetCheck);
+    List<User> findAllBySiteInfoAndUserHelmetCheckAndRole(SiteInfo siteInfo, boolean userHelmetCheck, Role role);
     List<User> findAllBySiteInfoAndRole(SiteInfo siteInfo, Role role);
 }

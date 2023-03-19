@@ -28,6 +28,7 @@ public class SuccessResponseMessage {
     public static final String USER_INFO = "유저 개인정보 조회 완료";
     public static final String USER_HELMET_CHECK = "근로자 안전모 착용 유무 조회 완료";
     public static final String EDIT_USER_HELMET_CHECK = "근로자 안전모 착용 변경 완료";
+    public static final String CANCEL_SITE_ACCEPT = "현장 승인 대기 중 취소 완료";
 
     //SiteInfo
     public static final String CREATE_SITE = "현장 생성 완료";

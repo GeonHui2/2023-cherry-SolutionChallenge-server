@@ -111,7 +111,7 @@ public class SiteInfo {
 
     public void subUser(User user) {
         userList.remove(user);
-        user.mappingUser(this);
+        user.mappingUser(null);
     }
 
     public void addSiteCheck(SiteCheck siteCheck) {
