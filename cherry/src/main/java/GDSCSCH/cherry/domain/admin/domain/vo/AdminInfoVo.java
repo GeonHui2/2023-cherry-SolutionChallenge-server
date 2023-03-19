@@ -11,6 +11,7 @@ public class AdminInfoVo {
 
     private final Long adminId;
     private final String adminName;
+    private final String adminEmail;
     private final String adminPhoneNum;
     private final int adminAge;
     private final Role role;

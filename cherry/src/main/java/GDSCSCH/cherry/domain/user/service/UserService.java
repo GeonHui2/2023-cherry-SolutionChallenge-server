@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -49,7 +50,7 @@ public class UserService {
         createToken(email, response);
         log.info(user.getUserEmail() + " (id : " + user.getId() + ") login");
 
-        return new UserSignInResponse(user.getUserInfo(), user.getSiteInfo() == null ? false : true);
+        return new UserSignInResponse(user.getUserInfo());
     }
 
     //회원가입 및 로그인
@@ -112,7 +113,6 @@ public class UserService {
 
         SiteInfo site = siteInfoRepository.findById(user.getSiteInfo().getId()).orElseThrow(() -> SiteInfoNotFoundException.EXCEPTION);
         site.subUser(user);
-        userRepository.delete(user);
     }
 
     //유저 개인정보 조회
@@ -147,8 +147,13 @@ public class UserService {
         List<User> trueHelmetUserList = userRepository.findAllBySiteInfoAndUserHelmetCheck(site, true);
         List<UserInfoResponse> checked = trueHelmetUserList.stream().map(t -> new UserInfoResponse(t.getUserInfo())).collect(Collectors.toList());
 
-        List<User> flaseHelmetUserList = userRepository.findAllBySiteInfoAndUserHelmetCheck(site, false);
-        List<UserInfoResponse> unchecked = flaseHelmetUserList.stream().map(t -> new UserInfoResponse(t.getUserInfo())).collect(Collectors.toList());
+        List<User> staffFalseHelmetUserList = userRepository.findAllBySiteInfoAndUserHelmetCheckAndRole(site, false, STAFF);
+        List<User> userFalseHelmetUserList = userRepository.findAllBySiteInfoAndUserHelmetCheckAndRole(site, false, USER);
+        List<UserInfoResponse> staff = staffFalseHelmetUserList.stream().map(t -> new UserInfoResponse(t.getUserInfo())).collect(Collectors.toList());
+        List<UserInfoResponse> user = userFalseHelmetUserList.stream().map(t -> new UserInfoResponse(t.getUserInfo())).collect(Collectors.toList());
+        List<UserInfoResponse> unchecked = new ArrayList<>();
+        for (UserInfoResponse u : staff) unchecked.add(u);
+        for (UserInfoResponse u : user) unchecked.add(u);
 
         return new UserHelmetListResponse(checked, unchecked);
     }
@@ -202,6 +207,15 @@ public class UserService {
     public void updateHelmetCheck(boolean helmetCheck) {
         User user = userUtils.getUserFromSecurityContext();
         user.changeHelmetCheck(helmetCheck);
+    }
+
+    //현장 승인 대기 중 취소
+    @Transactional
+    public void cancelAccept(Long userId) {
+        User user = findUserById(userId);
+
+        SiteInfo site = siteInfoRepository.findById(user.getSiteInfo().getId()).orElseThrow(() -> SiteInfoNotFoundException.EXCEPTION);
+        site.subUser(user);
     }
 
     private void createToken(String email, HttpServletResponse response) {

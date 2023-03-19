@@ -13,6 +13,7 @@ public class UserDetailInfoResponse {
 
     private String userName;
     private String userEmail;
+    private String userPhoneNum;
     private Integer userAge;
     private Role role;
 
@@ -20,6 +21,7 @@ public class UserDetailInfoResponse {
         this.id = userInfoVo.getUserId();
         this.userName = userInfoVo.getUserName();
         this.userEmail = userInfoVo.getUserEmail();
+        this.userPhoneNum = userInfoVo.getUserPhoneNum();
         this.userAge = userInfoVo.getUserAge();
         this.role = userInfoVo.getRole();
     }

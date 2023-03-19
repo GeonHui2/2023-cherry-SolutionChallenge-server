@@ -1,14 +1,9 @@
 package GDSCSCH.cherry.domain.user.presentation;
 
-import GDSCSCH.cherry.domain.admin.domain.Role;
-import GDSCSCH.cherry.domain.user.presentation.dto.request.ChangeHelmetCheck;
-import GDSCSCH.cherry.domain.user.presentation.dto.request.ChangeUserInfoRequest;
-import GDSCSCH.cherry.domain.user.presentation.dto.request.GrantSiteInfo;
-import GDSCSCH.cherry.domain.user.presentation.dto.request.UserSignUp;
+import GDSCSCH.cherry.domain.user.presentation.dto.request.*;
 import GDSCSCH.cherry.domain.user.presentation.dto.response.*;
 import GDSCSCH.cherry.domain.user.service.UserService;
 import GDSCSCH.cherry.global.security.oauth.TokenVerifierer;
-import GDSCSCH.cherry.global.successResponse.StatusCode;
 import GDSCSCH.cherry.global.successResponse.SuccessResponse;
 import GDSCSCH.cherry.global.successResponse.SuccessResponseMessage;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
-import java.util.List;
 
 import static GDSCSCH.cherry.global.successResponse.StatusCode.*;
 
@@ -74,7 +68,7 @@ public class UserController {
         return SuccessResponse.successtoResponseEntity(OK, result, SuccessResponseMessage.USER_LOGOUT_SUCCESS);
     }
 
-    //관리자 본인 현장 정보 조회
+    //유저 본인 현장 정보 조회
     @GetMapping("/getSiteInfo")
     public ResponseEntity getSiteInfo(@RequestParam String email) {
         Long siteInfoId = userService.getSiteInfo(email);
@@ -120,5 +114,13 @@ public class UserController {
         userService.updateHelmetCheck(changeHelmetCheck.isHelmetCheck());
 
         return SuccessResponse.successtoResponseEntity(OK, null, SuccessResponseMessage.EDIT_USER_HELMET_CHECK);
+    }
+
+    //현장 승인 대기 중 취소
+    @PatchMapping("/cancelAccept/{userId}")
+    public ResponseEntity cancelAccept(@PathVariable("userId") Long userId) {
+        userService.cancelAccept(userId);
+
+        return SuccessResponse.successtoResponseEntity(OK, null, SuccessResponseMessage.CANCEL_SITE_ACCEPT);
     }
 }

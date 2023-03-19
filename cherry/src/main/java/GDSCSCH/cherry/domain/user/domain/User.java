@@ -8,7 +8,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import javax.annotation.Nullable;
 import javax.persistence.*;
+import javax.validation.Valid;
 
 import static javax.persistence.EnumType.STRING;
 import static javax.persistence.FetchType.LAZY;
@@ -36,6 +38,7 @@ public class User {
 
     @ManyToOne (fetch = LAZY)
     @JoinColumn(name = "site_info_id")
+    @Nullable
     private SiteInfo siteInfo;
 
     @Builder

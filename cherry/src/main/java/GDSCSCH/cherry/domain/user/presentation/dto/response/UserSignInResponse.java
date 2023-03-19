@@ -10,11 +10,21 @@ import lombok.Getter;
 @AllArgsConstructor
 public class UserSignInResponse {
 
+    private Long id;
     private Role role;
     private boolean existSiteInfo;
+    private boolean waitingAccept;
 
-    public UserSignInResponse(UserInfoVo userInfoVo, boolean result) {
+    public UserSignInResponse(UserInfoVo userInfoVo) {
+        this.id = userInfoVo.getUserId();
         this.role = userInfoVo.getRole();
-        this.existSiteInfo = result;
+        if (role != Role.GUEST) {
+            this.existSiteInfo = true;
+        }
+        else this.existSiteInfo = false;
+        if (role == Role.GUEST && userInfoVo.getSiteInfo() != null) {
+            this.waitingAccept = true;
+        }
+        else this.waitingAccept = false;
     }
 }
