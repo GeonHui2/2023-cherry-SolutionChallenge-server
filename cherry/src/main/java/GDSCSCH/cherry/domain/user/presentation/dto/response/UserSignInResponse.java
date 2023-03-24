@@ -18,7 +18,7 @@ public class UserSignInResponse {
     public UserSignInResponse(UserInfoVo userInfoVo) {
         this.id = userInfoVo.getUserId();
         this.role = userInfoVo.getRole();
-        if (role != Role.GUEST) {
+        if (role != Role.GUEST && userInfoVo.getSiteInfo() != null) {
             this.existSiteInfo = true;
         }
         else this.existSiteInfo = false;
