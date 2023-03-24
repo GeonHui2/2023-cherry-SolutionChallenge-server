@@ -82,7 +82,10 @@ public class SiteInfoService implements SiteInfoUtils{
 
         admin.subSiteInfo();
         List<User> userList = userRepository.findAllBySiteInfo(site);
-        for (User u : userList) site.subUser(u);
+        for (User u : userList) {
+            site.subUser(u);
+            u.changeRole(Role.GUEST);
+        }
 
         siteInfoRepository.delete(site);
     }

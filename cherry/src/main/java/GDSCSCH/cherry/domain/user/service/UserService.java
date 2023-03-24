@@ -113,6 +113,7 @@ public class UserService {
 
         SiteInfo site = siteInfoRepository.findById(user.getSiteInfo().getId()).orElseThrow(() -> SiteInfoNotFoundException.EXCEPTION);
         site.subUser(user);
+        user.changeRole(GUEST);
     }
 
     //유저 개인정보 조회
@@ -126,34 +127,38 @@ public class UserService {
     public List<UserInfoResponse> getTrueHelmetUserList(Long siteId) {
         SiteInfo site = siteInfoRepository.findById(siteId).orElseThrow(() -> SiteInfoNotFoundException.EXCEPTION);
 
-        List<User> trueHelmetUserList = userRepository.findAllBySiteInfoAndUserHelmetCheck(site, true);
+        List<User> staffTrueHelmetUserList = userRepository.findAllBySiteInfoAndUserHelmetCheckAndRole(site, true, STAFF);
+        List<User> userTrueHelmetUserList = userRepository.findAllBySiteInfoAndUserHelmetCheckAndRole(site, true, USER);
+        List<UserInfoResponse> staffTrue = staffTrueHelmetUserList.stream().map(t -> new UserInfoResponse(t.getUserInfo())).collect(Collectors.toList());
+        List<UserInfoResponse> userTrue = userTrueHelmetUserList.stream().map(t -> new UserInfoResponse(t.getUserInfo())).collect(Collectors.toList());
+        List<UserInfoResponse> checked = new ArrayList<>();
+        for (UserInfoResponse u : staffTrue) checked.add(u);
+        for (UserInfoResponse u : userTrue) checked.add(u);
 
-        return trueHelmetUserList.stream().map(t -> new UserInfoResponse(t.getUserInfo())).collect(Collectors.toList());
+        return checked;
     }
 
     //안전모 안 쓴 근로자 리스트 확인
     public List<UserInfoResponse> getFalseHelmetUserList(Long siteId) {
         SiteInfo site = siteInfoRepository.findById(siteId).orElseThrow(() -> SiteInfoNotFoundException.EXCEPTION);
 
-        List<User> flaseHelmetUserList = userRepository.findAllBySiteInfoAndUserHelmetCheck(site, false);
+        List<User> staffFalseHelmetUserList = userRepository.findAllBySiteInfoAndUserHelmetCheckAndRole(site, false, STAFF);
+        List<User> userFalseHelmetUserList = userRepository.findAllBySiteInfoAndUserHelmetCheckAndRole(site, false, USER);
+        List<UserInfoResponse> staffFalse = staffFalseHelmetUserList.stream().map(t -> new UserInfoResponse(t.getUserInfo())).collect(Collectors.toList());
+        List<UserInfoResponse> userFalse = userFalseHelmetUserList.stream().map(t -> new UserInfoResponse(t.getUserInfo())).collect(Collectors.toList());
+        List<UserInfoResponse> unchecked = new ArrayList<>();
+        for (UserInfoResponse u : staffFalse) unchecked.add(u);
+        for (UserInfoResponse u : userFalse) unchecked.add(u);
 
-        return flaseHelmetUserList.stream().map(t -> new UserInfoResponse(t.getUserInfo())).collect(Collectors.toList());
+        return unchecked;
     }
 
     //안전모 착용 유무 근로자 리스트
     public UserHelmetListResponse getUserHelmetList(Long siteId) {
         SiteInfo site = siteInfoRepository.findById(siteId).orElseThrow(() -> SiteInfoNotFoundException.EXCEPTION);
 
-        List<User> trueHelmetUserList = userRepository.findAllBySiteInfoAndUserHelmetCheck(site, true);
-        List<UserInfoResponse> checked = trueHelmetUserList.stream().map(t -> new UserInfoResponse(t.getUserInfo())).collect(Collectors.toList());
-
-        List<User> staffFalseHelmetUserList = userRepository.findAllBySiteInfoAndUserHelmetCheckAndRole(site, false, STAFF);
-        List<User> userFalseHelmetUserList = userRepository.findAllBySiteInfoAndUserHelmetCheckAndRole(site, false, USER);
-        List<UserInfoResponse> staff = staffFalseHelmetUserList.stream().map(t -> new UserInfoResponse(t.getUserInfo())).collect(Collectors.toList());
-        List<UserInfoResponse> user = userFalseHelmetUserList.stream().map(t -> new UserInfoResponse(t.getUserInfo())).collect(Collectors.toList());
-        List<UserInfoResponse> unchecked = new ArrayList<>();
-        for (UserInfoResponse u : staff) unchecked.add(u);
-        for (UserInfoResponse u : user) unchecked.add(u);
+        List<UserInfoResponse> checked = getTrueHelmetUserList(siteId);
+        List<UserInfoResponse> unchecked = getFalseHelmetUserList(siteId);
 
         return new UserHelmetListResponse(checked, unchecked);
     }
