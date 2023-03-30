@@ -1,9 +1,9 @@
 spring:
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
-    url: jdbc:mariadb://3.37.201.188:3306/cherry
+    url: jdbc:mariadb://3.37.75.80:3306/cherry
     username: cherry
-    password: 20181549
+    password: 20191531
   jpa:
     hibernate:
       ddl-auto: none
